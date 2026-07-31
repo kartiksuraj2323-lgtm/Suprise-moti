@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Surprise 💜</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg,#d8b4fe,#f9a8d4,#bfdbfe);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.container{
+    width:90%;
+    max-width:500px;
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(15px);
+    border-radius:25px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 40px rgba(0,0,0,0.2);
+}
+
+h1{
+    color:#7c3aed;
+    margin-bottom:15px;
+}
+
+p{
+    color:#5b4b6b;
+    margin-bottom:20px;
+}
+
+.hidden{
+    display:none;
+}
+
+/* Lock */
+
+#pinDisplay{
+    width:200px;
+    height:50px;
+    margin:15px auto;
+    background:white;
+    border-radius:10px;
+    font-size:28px;
+    letter-spacing:10px;
+    line-height:50px;
+}
+
+.keypad{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.key{
+    padding:18px;
+    border:none;
+    border-radius:15px;
+    background:#c084fc;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.key:hover{
+    background:#9333ea;
+}
+
+.btn{
+    margin-top:20px;
+    padding:12px 25px;
+    border:none;
+    border-radius:25px;
+    background:#7c3aed;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.option{
+    display:block;
+    width:100%;
+    margin:10px 0;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:#f3e8ff;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.option:hover{
+    background:#d8b4fe;
+}
+
+.final-message{
+    font-size:32px;
+    color:#7c3aed;
+}
+
+.emoji{
+    font-size:40px;
+    animation:float 2s infinite alternate;
+}
+
+@keyframes float{
+    from{transform:translateY(0);}
+    to{transform:translateY(-10px);}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LOCK SCREEN -->
+    <div id="lockScreen">
+        <div class="emoji">🦋🌸🍃</div>
+        <h1>A Special Surprise</h1>
+        <p>Enter the secret PIN to unlock 💜</p>
+
+        <div id="pinDisplay"></div>
+
+        <div class="keypad">
+            <button class="key" onclick="addNum('1')">1</button>
+            <button class="key" onclick="addNum('2')">2</button>
+            <button class="key" onclick="addNum('3')">3</button>
+            <button class="key" onclick="addNum('4')">4</button>
+            <button class="key" onclick="addNum('5')">5</button>
+            <button class="key" onclick="addNum('6')">6</button>
+            <button class="key" onclick="addNum('7')">7</button>
+            <button class="key" onclick="addNum('8')">8</button>
+            <button class="key" onclick="addNum('9')">9</button>
+            <button class="key" onclick="clearPin()">C</button>
+            <button class="key" onclick="addNum('0')">0</button>
+            <button class="key" onclick="checkPin()">✓</button>
+        </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="quizScreen" class="hidden">
+        <h1 id="question"></h1>
+        <div id="answers"></div>
+    </div>
+
+    <!-- FRIEND QUESTION -->
+    <div id="friendScreen" class="hidden">
+        <h1>Will you be my friend? 💜</h1>
+        <button class="btn" onclick="showThankYou()">Yes 🌸</button>
+    </div>
+
+    <!-- FINAL MESSAGE -->
+    <div id="thankScreen" class="hidden">
+        <div class="emoji">🦋🌸☕</div>
+        <h1 class="final-message">
+            Thank You Chudail 💜
+        </h1>
+        <p>
+            Wishing you endless happiness, nature adventures,
+            iced chocolates, iced coffees and lots of smiles 🍃☕
+        </p>
+    </div>
+
+</div>
+
+<script>
+
+let pin = "";
+
+function addNum(num){
+    if(pin.length < 4){
+        pin += num;
+        document.getElementById("pinDisplay").innerText =
+            "*".repeat(pin.length);
+    }
+}
+
+function clearPin(){
+    pin = "";
+    document.getElementById("pinDisplay").innerText = "";
+}
+
+function checkPin(){
+    if(pin === "2006"){
+        document.getElementById("lockScreen").classList.add("hidden");
+        document.getElementById("quizScreen").classList.remove("hidden");
+        loadQuestion();
+    } else {
+        alert("Wrong PIN 💜");
+        clearPin();
+    }
+}
+
+const questions = [
+{
+q:"What is my favourite place? 🍃",
+a:["Nature","Shopping Mall","Airport"],
+correct:0
+},
+{
+q:"Which food do I love the most? 🍛",
+a:["Butter Chicken","Pizza","Burger"],
+correct:0
+},
+{
+q:"Which drink do I enjoy? ☕",
+a:["Iced Chocolate & Iced Coffee","Tea","Milk"],
+correct:0
+},
+{
+q:"Which colours make me happy? 💜",
+a:["Purple, Burgundy, Blue & Pink","Black","Orange"],
+correct:0
+}
+];
+
+let current = 0;
+
+function loadQuestion(){
+
+    if(current >= questions.length){
+        document.getElementById("quizScreen").classList.add("hidden");
+        document.getElementById("friendScreen").classList.remove("hidden");
+        return;
+    }
+
+    document.getElementById("question").innerText =
+        questions[current].q;
+
+    let ansDiv = document.getElementById("answers");
+    ansDiv.innerHTML = "";
+
+    questions[current].a.forEach((ans,index)=>{
+        ansDiv.innerHTML +=
+        `<button class="option"
+         onclick="nextQuestion(${index})">
+         ${ans}
+         </button>`;
+    });
+}
+
+function nextQuestion(index){
+    current++;
+    loadQuestion();
+}
+
+function showThankYou(){
+    document.getElementById("friendScreen").classList.add("hidden");
+    document.getElementById("thankScreen").classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
